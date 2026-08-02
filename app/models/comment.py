@@ -1,6 +1,7 @@
 from sqlalchemy import String, ForeignKey, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base_class import Base
+from typing import Optional
 
 class Comment(Base):
     __tablename__ = "comments"
@@ -11,4 +12,5 @@ class Comment(Base):
 
     # Relationships
     ticket = relationship("Ticket", back_populates="comments")
+    image_url: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, default=None)
     user = relationship("User", back_populates="comments")

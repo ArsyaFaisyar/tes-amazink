@@ -1,5 +1,5 @@
-from typing import Annotated
-from fastapi import APIRouter, Depends
+from typing import Annotated,Optional
+from fastapi import APIRouter, Depends, File, Form, UploadFile, status
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.services.comment import CommentService
@@ -12,20 +12,34 @@ router = APIRouter()
 @router.post("/", response_model=CommentOut)
 def create_comment(
     ticket_id: int,
-    comment_in: CommentCreate,
+    content: Annotated[str, Form(...)],                # Ambil teks dari Form-Data
     db: Annotated[Session, Depends(get_db)],
-    current_user: Annotated[User, Depends(get_current_user)]
+    current_user: Annotated[User, Depends(get_current_user)],
+    image: Optional[UploadFile] = File(None)            # Upload file opsional
 ):
-    return CommentService.create_comment(db, ticket_id, comment_in, current_user)
+    return CommentService.create_comment(
+        db=db,
+        ticket_id=ticket_id,
+        content=content,
+        user=current_user,
+        image=image
+    )
 
 @router.put("/{comment_id}", response_model=CommentOut)
 def update_comment(
     comment_id: int,
-    comment_in: CommentUpdate,
-    db: Annotated[Session, Depends(get_db)],
-    current_user: Annotated[User, Depends(get_current_user)]
+    content: Annotated[Optional[str], Form()] = None,
+    db: Annotated[Session, Depends(get_db)] = None,
+    current_user: Annotated[User, Depends(get_current_user)] = None,
+    image: Optional[UploadFile] = File(None)
 ):
-    return CommentService.update_comment(db, comment_id, comment_in, current_user)
+    return CommentService.update_comment(
+        db=db,
+        comment_id=comment_id,
+        content=content,
+        user=current_user,
+        image=image
+    )
 
 @router.delete("/{comment_id}")
 def delete_comment(

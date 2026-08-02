@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
+from typing import Optional
 from app.schemas.user import UserOut
 
 class CommentBase(BaseModel):
@@ -15,6 +16,7 @@ class CommentOut(CommentBase):
     id: int
     ticket_id: int
     user_id: int
+    image_url: Optional[str] = None
     created_at: datetime
     updated_at: datetime
     user: UserOut
