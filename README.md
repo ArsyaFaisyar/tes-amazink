@@ -133,11 +133,6 @@ Aplikasi akan berjalan di:
 FastAPI otomatis menyediakan dokumentasi interaktif:
 - Swagger UI: `http://127.0.0.1:8000/docs`
 
-### 10. (Opsional) Menjalankan dengan Docker
-Jika project menyertakan `Dockerfile` / `docker-compose.yml`:
-```bash
-docker-compose up --build
-```
 
 ## Akun Demo
 
